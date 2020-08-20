@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Snake Game</title>
+        <style>
+            canvas{
+                background-color:black;
+                border: 1px solid red;
+                text-align: center;
+            }
+            body{
+                background-color: black;
+            }
+            header{
+                text-align: center;
+            }
+
+            label{
+                font-size: 25px;
+            }
+            div{
+                margin-top: 2px;
+                display: inline-block;
+            }
+            #level_div{
+                margin-right: 50px;
+                color: white;
+            }
+
+            #score_div{
+                margin-left: 50px;
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            
+            <div id='level_div'>
+                <label>Level</label>
+                <label id = 'level'>1</label>
+            </div>
+
+            <div id='score_div'>
+                <label>Score</label>
+                <label id="score">0</label>            
+            </div>
+        
+        </header>
+
+        <canvas id='can'>
+            hey this is canvas
+        </canvas>
+    </body>
+
+    <script src="helpers.js"></script>
+    <script src="snack.js"></script>
+    <script src="food.js"></script>
+
+    <script src="app.js"></script>
+</html>
