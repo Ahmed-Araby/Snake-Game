@@ -2,7 +2,7 @@
 Snack game using HTML, Java Script, CSS.
 
 this is screen shoot for the game 
-<img src="examples/gameScreen.png" width="480" alt="Combined Image" />
+<img src="./gameScreen.png" width="480" alt="Combined Image" />
 
 
 this an abstruct diagram for the classes and how they interact togeather
