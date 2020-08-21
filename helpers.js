@@ -1,20 +1,14 @@
-function drawRectangle(upperLeftCol, upperLeftRow, width, height, color)
+function drawRectangle(upperLeftCol, upperLeftRow,
+                         width, height, color)
 {
-    ctx.fillStyle = color;
+    //console.log(upperLeftCol, upperLeftCol, width, height, color, "in drawing")
+    ctx.fillStyle = color
     ctx.fillRect(upperLeftCol, upperLeftRow, width, height);
     return ;
 }
 
-
-
-
-
-class point
+function clearScreen()
 {
-    constructor(col, row)
-    {
-        this.col = col;
-        this.row = row;
-        return ;
-    }
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
