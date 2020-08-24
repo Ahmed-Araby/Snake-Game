@@ -17,10 +17,12 @@ I will provide UML diagram latter <br/>
 
 
 -- my notes -- 
+<br/>
+https://docs.google.com/document/d/1dYxsGwqXWLfKpQEuuP74qqNlMfNmQPVj6F24eAoePzY/edit 
+<br/>
 - steps to implement 
 - bugs 
 - to do 
 - questions
-https://docs.google.com/document/d/1dYxsGwqXWLfKpQEuuP74qqNlMfNmQPVj6F24eAoePzY/edit 
 
 
