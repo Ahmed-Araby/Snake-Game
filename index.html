@@ -5,7 +5,7 @@
         <style>
             canvas{
                 background-color:black;
-                border: 1px solid red;
+                border: 5px solid white;
                 text-align: center;
             }
             body{
@@ -21,15 +21,11 @@
             div{
                 margin-top: 2px;
                 display: inline-block;
-            }
-            #level_div{
-                margin-right: 50px;
                 color: white;
+                margin-left: 80px;
             }
-
-            #score_div{
-                margin-left: 50px;
-                color: white;
+            #score, #snack_length ,#level{
+                color: red;
             }
         </style>
     </head>
@@ -46,7 +42,17 @@
                 <label>Score</label>
                 <label id="score">0</label>            
             </div>
-        
+
+            <div id='snack_length_div'>
+                <label>Snack Length</label>
+                <label id="snack_length">1</label> 
+            </div>
+            
+            <div id='wrap_borders_div'>
+                <label>Wrap Borders</label>
+                <input type="checkbox" id="wrap_borders">
+            </div>
+            
         </header>
 
         <canvas id='can'>
@@ -58,5 +64,6 @@
     <script src="helpers.js"></script>
     <script src="sprites.js"></script>
     <script src="food.js"></script>
+    <script src="snack.js"></script>
     <script src="gameController.js"></script>
 </html>

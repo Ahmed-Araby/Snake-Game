@@ -6,14 +6,23 @@ class gameController
         this.FPS = 10;
         this.level = 1;
         this.score = 0;
+        
+        /*
+        false - >> detect collision with the borders 
+        true - >> wrap borders 
+        */
+        
+        this.wrapBorders = false;
 
+        ///////////////////////////////////
+        
         /*
         possible game states:
 
         running 
         gameOver
         */
-        this.gameState = 'running';
+        this.gameState = 'stop';
         
 
         // events 
@@ -34,6 +43,12 @@ class gameController
         return; 
     }
 
+    flipWrapBorders()
+    {
+        this.wrapBorders = ! this.wrapBorders;
+        return ;
+    }
+
     update()
     {
         // snack 
@@ -43,7 +58,7 @@ class gameController
         // may be in feature, reduce the size and the score gain
         this.food.update();
 
-        // html document
+
         return ;
     }
 
@@ -64,27 +79,67 @@ class gameController
         this.food.render();
         
         // html
+        this.htmlRender();
     }
 
     collisionDetection()
     {
-        // snack with it's body 
+        /*
+        [TO DO ]
+        Split each collision detection type into one function
+        */
+
+
+
+        /*
+        snack with it's body,
+         eat it self 
+        */ 
         var SnackCells  = this.Snack.getSnackCells();
-        for(var i=1; i<SnackCells.length; i++)
+        var SnackHead = this.Snack.getHead();
+        var SnackHeadRectangle = SnackHead.getRectangle();
+        
+        for(var i=3; i<SnackCells.length; i++)
         {
-            if(SnackCells[0].col == SnackCells[i].col 
-                && SnackCells[0].row == SnackCells[i].row)
+            var SnackCellRectangle =  SnackCells[i].getRectangle();
+
+            if(SnackHeadRectangle.rect_rect_collisionDetection(SnackCellRectangle))
             {
                 this.Snack.collisionResolverBody(i);
                 break;
             }
         }
 
-        // snack with the wall 
-        var SnackHead = this.Snack.getHead();
-        if(SnackHead.col < 0 || SnackHead.col >= canvas.width ||
-            SnackHead.row < 0 || SnackHead.row >= canvas.height){
-            this.gameState = 'gameOver';
+        if(!this.wrapBorders){
+            /*
+            snack with the wall if enabled
+            take this decision form the user throw html             
+            */ 
+
+            /*
+            we need to get the direction of movement 
+            to get the next possible position
+            */
+            var dCol=0;
+            var dRow=0;
+            var snackMovementDirecton = this.Snack.getMovementDirection()
+            if(snackMovementDirecton == 'Left')
+                dCol = -1;
+            else if(snackMovementDirecton == 'Down')
+                dRow = 1;
+            else if(snackMovementDirecton == 'Right')
+                dCol = 1;
+            else if(snackMovementDirecton == 'Up')
+                dRow = -1;
+
+            var SnackHead = this.Snack.getHead();
+            if(SnackHead.col + dCol * SNACKCELLWIDTH < 0 ||
+                 SnackHead.col + dCol * SNACKCELLWIDTH >= canvas.width ||
+                 SnackHead.row  + dRow * SNACKCELLHeight < 0 ||
+                 SnackHead.row  + dRow * SNACKCELLHeight >= canvas.height){
+                 this.gameState = 'gameOver';
+            }
+            
         }
         
         // snack with food
@@ -93,7 +148,7 @@ class gameController
 
         if(SnackRectangle.rect_rect_collisionDetection(foodRectangle))
         {
-            console.log("snack wiht food collision detected")
+            //console.log("snack wiht food collision detected")
             this.Snack.collisionResolverFood();
             this.food.collisionResolver();  // no need for for now 
             this.score += this.food.getScoreGain();
@@ -104,13 +159,23 @@ class gameController
 
     gameLoop()
     {
+        /*
+        thjs could be better implemented using game states and 
+        stack of states
+        */
 
-        if(this.gameState == 'gameOver'){
+        //console.log(this.gameState, "game State")
+        if(this.gameState =='levelUp'){
+            return ;
+        }
+
+        else if(this.gameState == 'gameOver'){
             this.gameOver();
             return ;
         }
-        if(this.score >= 100){
-            this.levelLabel();
+
+        else if(this.score >= WINNINGSCORE){ // winning = level up 
+            this.levelUp();
             return ;
         }
 
@@ -127,14 +192,49 @@ class gameController
     
     levelUp()
     {
+
+        //console.log("here")
+        // reset all the game objects 
+        this.Snack = new snack(LASTPRESSEDKEY, SNACKCELLWIDTH,
+            SNACKCELLHeight, SNACKHEADCOLOR,
+            SNACKBODYCOLOR);
+
+        // as the position of the snack will be changed
+        this.food.collisionResolver();         
+
+        this.gameState = 'levelUp';
+
+        // update html stuff and game state 
+        this.level +=1;
+        this.score = 0;
+        
+
+        // load the image 
+        var image = loadImage(LEVELUPIMAGEPATH);
+        putImageIntoCanvas(image);
+
+        return ;
     }
 
     gameOver()
     {
+        clearScreen();
+
+        // load the image
+        var Image = loadImage(GAMEOVERIMAGEPATH);
+
+        // put image into canvas 
+        putImageIntoCanvas(Image);
+       return ;
+
     }
 
-    updateHtml()
+    htmlRender()
     {
+        scoreLabel.innerHTML = this.score;
+        levelLabel.innerHTML = this.level;
+        snackLength.innerHTML = this.Snack.getSnackLength();
+
     }
 
     setGameState(gameState)
@@ -215,8 +315,15 @@ document.onkeydown = function(e) {
             break;
     }
     SnackGame.setCurrentKeyPressed(currentPressedKey);
-    console.log(currentPressedKey, " key is pressed ");
+    if(currentPressedKey !="")
+        SnackGame.setGameState('running');
+
+    //console.log(currentPressedKey, " key is pressed ");
 }
+
+wrapBorders.addEventListener('change', function(){
+    SnackGame.wrapBorders = !SnackGame.wrapBorders;
+});
 
 // infinite game loop
 setInterval(() => {
