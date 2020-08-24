@@ -15,8 +15,10 @@ as if so the snack will not be able to reach it
 var FOODCELLWIDTH  = 60;
 var FOODCELLHeight = 60;
 var APPLESCOREGAIN = 5;
-var WINNINGSCORE = 5;
+var WINNINGSCORE = 100;
 
+var INITIALFPS = 7;
+var FPSINCREMENT = 2;
 // global variables
 // canvas 
 var canvas = document.getElementById("can");

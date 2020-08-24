@@ -3,7 +3,7 @@ class gameController
     constructor()
     {
         // game state 
-        this.FPS = 10;
+        this.FPS = INITIALFPS;
         this.level = 1;
         this.score = 0;
         
@@ -22,7 +22,7 @@ class gameController
         running 
         gameOver
         */
-        this.gameState = 'stop';
+        this.gameState = 'running';
         
 
         // events 
@@ -43,11 +43,7 @@ class gameController
         return; 
     }
 
-    flipWrapBorders()
-    {
-        this.wrapBorders = ! this.wrapBorders;
-        return ;
-    }
+   
 
     update()
     {
@@ -133,6 +129,10 @@ class gameController
                 dRow = -1;
 
             var SnackHead = this.Snack.getHead();
+
+            /*
+            next step in your current direction
+            */
             if(SnackHead.col + dCol * SNACKCELLWIDTH < 0 ||
                  SnackHead.col + dCol * SNACKCELLWIDTH >= canvas.width ||
                  SnackHead.row  + dRow * SNACKCELLHeight < 0 ||
@@ -165,7 +165,8 @@ class gameController
         */
 
         //console.log(this.gameState, "game State")
-        if(this.gameState =='levelUp'){
+        
+        if(this.gameState =='stop'){
             return ;
         }
 
@@ -192,40 +193,41 @@ class gameController
     
     levelUp()
     {
+        this.reset();
 
-        //console.log("here")
-        // reset all the game objects 
-        this.Snack = new snack(LASTPRESSEDKEY, SNACKCELLWIDTH,
-            SNACKCELLHeight, SNACKHEADCOLOR,
-            SNACKBODYCOLOR);
-
-        // as the position of the snack will be changed
-        this.food.collisionResolver();         
-
-        this.gameState = 'levelUp';
-
-        // update html stuff and game state 
         this.level +=1;
         this.score = 0;
-        
+        this.FPS +=FPSINCREMENT;
 
         // load the image 
         var image = loadImage(LEVELUPIMAGEPATH);
         putImageIntoCanvas(image);
 
-        return ;
+        this.gameState = 'stop';
     }
 
     gameOver()
     {
-        clearScreen();
+        
+        this.reset();
+        
+        this.level = 1;
+        this.score = 0;
 
         // load the image
-        var Image = loadImage(GAMEOVERIMAGEPATH);
-
-        // put image into canvas 
+        var Image = loadImage(GAMEOVERIMAGEPATH); 
         putImageIntoCanvas(Image);
-       return ;
+
+        this.gameState = 'stop';
+    }
+
+    reset()
+    {
+        clearScreen();
+        this.Snack = new snack(LASTPRESSEDKEY, SNACKCELLWIDTH,
+            SNACKCELLHeight, SNACKHEADCOLOR,
+            SNACKBODYCOLOR);
+        this.food.collisionResolver();         
 
     }
 
@@ -251,6 +253,13 @@ class gameController
         if(currentPressedKey!="")
             this.currentPressedKey = currentPressedKey;
     }
+
+    flipWrapBorders()
+    {
+        this.wrapBorders = ! this.wrapBorders;
+        return ;
+    }
+
     getFPS()
     {
         return this.FPS;
@@ -262,6 +271,9 @@ class gameController
         alternative procedure is to keep track 
         the empty cells and use one of them when needed 
         but this will require alot of memory 
+
+        this function have to be in the game controller as 
+        it needs to interact with the snack object 
         */
 
         var SnackCells = this.Snack.getSnackCells();

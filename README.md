@@ -12,3 +12,15 @@ I will provide UML diagram latter <br/>
 <br/>
 
 
+
+
+
+
+-- my notes -- 
+- steps to implement 
+- bugs 
+- to do 
+- questions
+https://docs.google.com/document/d/1dYxsGwqXWLfKpQEuuP74qqNlMfNmQPVj6F24eAoePzY/edit 
+
+

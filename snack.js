@@ -123,12 +123,18 @@ class snack
         // move body 
         for(var i=snackLength-1; i>0; i--)
         {
+            /*
+            // fancy stuff with no need
             // bring vector of movement
             var dCol = (this.cells[i-1].col - this.cells[i].col);
             var dRow = (this.cells[i-1].row - this.cells[i].row);
             // move this cell
             this.cells[i].col += dCol
-            this.cells[i].row += dRow     
+            this.cells[i].row += dRow   
+            */
+           
+            this.cells[i].col = this.cells[i-1].col;
+            this.cells[i].row = this.cells[i-1].row;
         }
 
         // move head, depending on the last pressed key 
@@ -141,6 +147,32 @@ class snack
         this.cells[0].col +=dCol * this.cellWidth;
         this.cells[0].row += dRow * this.cellHeight;
         
+        /*
+        wrapping : 
+        - we only need to wrap the head, 
+          and the rest of the body will be handled automatically 
+        - snack will hit only one border at a time.
+        */
+
+        // right corner
+        if(this.cells[0].col + SNACKCELLWIDTH <= 0){            
+            this.cells[0].col = canvas.width;
+            //this.lastPressedKey = 'Left';
+        }
+        else if(this.cells[0].col >= canvas.width){
+            this.cells[0].col = - SNACKCELLWIDTH;
+            //this.lastPressedKey = 'Right';
+        }
+        // lower corner 
+        else if(this.cells[0].row + SNACKCELLHeight <=0){
+            this.cells[0].row = canvas.height;
+            //this.lastPressedKey = 'Up';
+        }    
+        else if(this.cells[0].row >= canvas.height){
+            this.cells[0].row = - SNACKCELLHeight;
+            //this.lastPressedKey = 'Down';
+        }
+
         // enlarge the snack here if needed
     }
 
