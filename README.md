@@ -1,5 +1,5 @@
 # Snack-Game
-Snack game using HTML, Java Script, CSS.
+Snack game using HTML, Java Script, CSS, play it here: https://ahmed-araby.github.io/Snake-Game/ .
 
 this is screen shoot for the game <br/>
 <img src="./gameScreen.png" width="480" alt="Combined Image" />
